@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SpeedLimiter</string>
+    <string name="km_hint">Enter speed limit (km/h)</string>
+    <string name="ok_button">OK</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+</resources>
