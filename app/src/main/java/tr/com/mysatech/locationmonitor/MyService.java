@@ -41,6 +41,7 @@ public class MyService extends Service implements LocationListener,
 
     final String TAG = "GPS";
     final String ERROR_TAG = "My Service";
+    public static boolean serviceRunning = false;
     private long UPDATE_INTERVAL = 2 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
 
@@ -53,7 +54,6 @@ public class MyService extends Service implements LocationListener,
 
     public MyService()
     {
-        super();
     }
 
     @Override
@@ -83,10 +83,11 @@ public class MyService extends Service implements LocationListener,
             if (b == null){
                 Log.d(ERROR_TAG, "Bundle is null");
             }
-            mSpeedLimit = b.getString("speed");
+            mSpeedLimit = MainActivity.mSpeedLimit;
             Log.d(ERROR_TAG, "speedLimit is: " + mSpeedLimit);
         }
         gac.connect();
+        serviceRunning = true;
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -94,6 +95,7 @@ public class MyService extends Service implements LocationListener,
     public void onDestroy()
     {
         gac.disconnect();
+        serviceRunning = false;
         super.onDestroy();
     }
 
@@ -113,18 +115,6 @@ public class MyService extends Service implements LocationListener,
             return;
         }
 
-/*
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-
-            return;
-        }
-*/
         Log.d(TAG, "onConnected");
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(gac);
@@ -180,7 +170,6 @@ public class MyService extends Service implements LocationListener,
     }
 
     private boolean isGooglePlayServicesAvailable() {
-        final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
@@ -195,27 +184,5 @@ public class MyService extends Service implements LocationListener,
         }
         Log.d(TAG, "This device is supported.");
         return true;
-    }
-
-    private void showAlert() {
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Enable Location")
-                .setMessage("Your Locations Settings is set to 'Off'.\nPlease Enable Location to " +
-                        "use this app")
-                .setPositiveButton("Location Settings", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-
-                        Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(myIntent);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-
-                    }
-                });
-        dialog.show();
     }
 }

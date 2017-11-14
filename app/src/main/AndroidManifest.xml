@@ -14,20 +14,22 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".MyWidget"
+        <receiver android:name=".MyWidget"
             android:icon="@drawable/example_appwidget_preview"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="tr.com.mysatech.locationmonitor.START_SERVICE"/>
+                <action android:name="tr.com.mysatech.locationmonitor.PAUSE_SERVICE"/>
+                <action android:name="tr.com.mysatech.locationmonitor.SETTINGS_ACTIVITY"/>
             </intent-filter>
 
             <meta-data

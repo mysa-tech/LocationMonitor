@@ -16,6 +16,7 @@ import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +24,10 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
 {
-    String mSpeedLimit;
+    private static final String TAG = "MainActivity";
+    static String mSpeedLimit;
     Button stopButton;
+    public static final String SPEED_TAG = "SpeedLimit";
     public static final int NOTIFICATION_ID = 1356;
     static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
@@ -76,7 +79,8 @@ public class MainActivity extends AppCompatActivity
                         .setSmallIcon(R.drawable.common_full_open_on_phone)
                         .build();
 
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager notificationManager = (NotificationManager)
+                        getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(NOTIFICATION_ID, notification);
 
                 intent.putExtra("speed", mSpeedLimit);
@@ -90,7 +94,6 @@ public class MainActivity extends AppCompatActivity
     public void stopRunningService(View view)
     {
         stopService(new Intent(MainActivity.this, MyService.class));
-
     }
 
     private boolean isLocationEnabled() {
